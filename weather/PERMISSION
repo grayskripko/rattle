@@ -1,0 +1,165 @@
+From gjw@togaware.com Sat Jan 16 21:12:03 2010
+Return-path: <gjw@togaware.com>
+Envelope-to: gjw@localhost
+Delivery-date: Sat, 16 Jan 2010 21:12:03 +1100
+Received: from localhost ([127.0.0.1] helo=nyx)
+	by nyx with esmtp (Exim 4.69)
+	(envelope-from <gjw@togaware.com>)
+	id 1NW51b-0000gK-N7
+	for gjw@localhost; Sat, 16 Jan 2010 20:32:55 +1100
+Delivered-To: gjwkayon@gmail.com
+Received: from gmail-pop.l.google.com [74.125.95.109]
+	by nyx with POP3 (fetchmail-6.3.9-rc2)
+	for <gjw@localhost> (single-drop); Sat, 16 Jan 2010 20:32:55 +1100 (EST)
+Received: by 10.229.82.3 with SMTP id z3cs625264qck;
+        Wed, 24 Jun 2009 01:41:39 -0700 (PDT)
+Received: by 10.141.49.15 with SMTP id b15mr987604rvk.25.1245832898369;
+        Wed, 24 Jun 2009 01:41:38 -0700 (PDT)
+Received: from n1-mxd1-3.myobnet.com (mxd1-3.ilisys.com.au [117.104.160.33])
+        by mx.google.com with ESMTP id k37si3972249rvb.58.2009.06.24.01.41.37;
+        Wed, 24 Jun 2009 01:41:38 -0700 (PDT)
+Received-SPF: neutral (google.com: 117.104.160.33 is neither permitted nor denied by best guess record for domain of gjw@togaware.com) client-ip=117.104.160.33;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 117.104.160.33 is neither permitted nor denied by best guess record for domain of gjw@togaware.com) smtp.mail=gjw@togaware.com
+Received: from n2-mxi1-3.myobnet.com (n2-mxi1-3.myobnet.com [10.194.20.135])
+	by n1-mxd1-3.myobnet.com (Postfix) with ESMTP id 5450D1C58C5
+	for <graham.williams@togaware.com>; Wed, 24 Jun 2009 18:41:36 +1000 (EST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by n2-mxi1-3.myobnet.com (Postfix) with ESMTP id 43909254004
+	for <graham.williams@togaware.com>; Wed, 24 Jun 2009 18:41:36 +1000 (EST)
+X-Virus-Scanned: by amavisd-new at ilisys.com.au
+X-Spam-Flag: NO
+X-Spam-Score: -3.598
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.598 tagged_above=-999 required=5
+	tests=[BAYES_00=-2.599, RCVD_IN_DNSWL_LOW=-1, UNPARSEABLE_RELAY=0.001]
+Received: from n2-mxi1-3.myobnet.com ([127.0.0.1])
+	by localhost (n2-mxi1-3.myobnet.com [127.0.0.1]) (amavisd-new, port 26)
+	with ESMTP id eot1oOzGRkNB for <graham.williams@togaware.com>;
+	Wed, 24 Jun 2009 18:41:35 +1000 (EST)
+Received: from outbound.icp-qv1-irony-out3.iinet.net.au (outbound.icp-qv1-irony-out3.iinet.net.au [203.59.1.148])
+	by n2-mxi1-3.myobnet.com (Postfix) with ESMTP id 539D8254007
+	for <graham.williams@togaware.com>; Wed, 24 Jun 2009 18:41:35 +1000 (EST)
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: ApsEAEqDQUp8qMHk/2dsb2JhbACZbbdvAoJCgUcF
+X-IronPort-AV: E=Sophos;i="4.42,282,1243785600"; 
+   d="scan'208";a="468358480"
+Received: from unknown (HELO kyral) ([124.168.193.228])
+  by outbound.icp-qv1-irony-out3.iinet.net.au with ESMTP; 24 Jun 2009 16:41:34 +0800
+Received: from gjw by kyral with local (Exim 4.69)
+	(envelope-from <gjw@kyral.togaware.com>)
+	id 1MJO2w-0000iV-CT
+	for graham.williams@togaware.com; Wed, 24 Jun 2009 18:41:34 +1000
+Resent-From: Graham.Williams@togaware.com
+Resent-Date: Wed, 24 Jun 2009 18:41:34 +1000
+Resent-Message-ID: <20090624084134.GA2338@kyral.togaware.com>
+Resent-To: graham.williams@togaware.com
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on kyral.togaware.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,UNPARSEABLE_RELAY
+	autolearn=ham version=3.2.5
+Received: from localhost
+	([127.0.0.1] helo=kyral ident=fetchmail)
+	by kyral with esmtp (Exim 4.69)
+	(envelope-from <C.Toby@bom.gov.au>)
+	id 1LCmpE-0004U0-F8
+	for gjw@localhost; Wed, 17 Dec 2008 14:11:52 +1100
+Received: from mail.ilisys.com.au [117.104.160.44]
+	by kyral with POP3 (fetchmail-6.3.9-rc2)
+	for <gjw@localhost> (single-drop); Wed, 17 Dec 2008 14:11:52 +1100 (EST)
+Received: (qmail-ldap/ctrl 7434 invoked by uid 67); 17 Dec 2008 03:11:49 -0000
+Received: (qmail-ldap/ctrl 7426 invoked from network); 17 Dec 2008 03:11:49 -0000
+Received: from mxi12.ilisys.com.au ([117.104.160.56])
+          (envelope-sender <C.Toby@bom.gov.au>)
+          by mail.ilisys.com.au (qmail-ldap-1.03) with SMTP
+          for <Graham.Williams@togaware.com>; 17 Dec 2008 03:11:49 -0000
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mxi12.ilisys.com.au (Postfix) with ESMTP id 9929868844D
+	for <Graham.Williams@togaware.com>; Wed, 17 Dec 2008 14:11:49 +1100 (EST)
+X-Virus-Scanned: by amavisd-new at ilisys.com.au
+Received: from mxi12.ilisys.com.au ([127.0.0.1])
+	by localhost (mxi12.ilisys.com.au [127.0.0.1]) (amavisd-new, port 26)
+	with ESMTP id m486wNJxpntS for <Graham.Williams@togaware.com>;
+	Wed, 17 Dec 2008 14:11:34 +1100 (EST)
+Received: from mgmtbom7.bom.gov.au (mgmtbom7.bom.gov.au [134.178.63.157])
+	by mxi12.ilisys.com.au (Postfix) with SMTP id 60CA96884FF
+	for <Graham.Williams@togaware.com>; Wed, 17 Dec 2008 14:11:24 +1100 (EST)
+X-Protective-Marking: VER=2005.6, NS=gov.au, SEC=UNCLASSIFIED, 
+    ORIGIN=C.Toby@bom.gov.au
+Received: from OWA.bom.gov.au (OWA.bom.gov.au) by mgmtbom7.bom.gov.au
+ (Clearswift SMTPRS 5.2.5) with ESMTP id <T8b51a8b15386b23f9dc5c@mgmtbom7.bom.gov.au> for <Graham.Williams@togaware.com>;
+ Wed, 17 Dec 2008 14:01:04 +1100
+Received: from officeho2.bom.gov.au ([134.178.14.21]) by OWA.bom.gov.au with Microsoft SMTPSVC(6.0.3790.1830);
+	 Wed, 17 Dec 2008 14:01:03 +1100
+X-MimeOLE: Produced By Microsoft Exchange V6.5
+x-classifier: janusSEAL 2.1.1
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-class: urn:content-classes:message
+Subject: RE: Using BOM data in textbook [SEC=UNCLASSIFIED]
+Date: Wed, 17 Dec 2008 14:01:03 +1100
+Message-ID: <656E711DAB9AA74FBB22DE320668E99202EEAE02@officeho2.bom.gov.au>
+In-Reply-To: <20081216053127.GA17521@kyral.togaware.com>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Thread-Topic: Using BOM data in textbook [SEC=UNCLASSIFIED]
+Thread-Index: AclfP4gOkwJCGByhQC6/SyQCPHnm+QAs83rw
+From: "Web Climate requests" <webclim@bom.gov.au>
+Sender: "Cathy Toby" <C.Toby@bom.gov.au>
+To: <Graham.Williams@togaware.com>
+X-OriginalArrivalTime: 17 Dec 2008 03:01:03.0842 (UTC) FILETIME=[B2CFBC20:01C95FF3]
+Resent-Date: Wed, 24 Jun 2009 18:41:34 +1000
+Status: O
+
+Good afternoon Graham
+
+The last 14 months of data are available free of charge from our web
+site. =20
+
+Historical data can be extracted from our archive for a fee.  You are
+permitted to use the data in your text book with the Bureau of
+Meteorology acknowledged as the source of the data.
+
+Regards
+Webclim
+Climate Information Services
+National Climate Centre
+GPO Box 1289 Melbourne Australia 3001
+Phone +61 3 9669 4082,  Fax +61 3 9669 4515
+Email: webclim@bom.gov.au=20
+
+=20
+
+-----Original Message-----
+From: Graham Williams [mailto:Graham.Williams@togaware.com]=20
+Sent: Tuesday, 16 December 2008 16:31
+To: Web Climate requests
+Subject: Using BOM data in textbook=20
+
+I am writing a textbook on data mining using the statistical language R.
+In scouting for some new data to demonstrate examples throughout the
+book, I came across http://www.bom.gov.au/climate/dwo/.
+
+I notice there is about 13 months of data. Do you archive the older data
+somewhere that is accessible (personally, I don't understand why you
+would remove the old files from their original locations over time
+- e.g., http://www.bom.gov.au/climate/dwo/200711/text/IDCJDW2124.csv
+appeared to disappear overnight)?
+
+Are there restrictions on the use of this data? For example, could I
+collect the data together over time myself and make it freely available
+as part of the textbook, with due credit?
+
+Regards,
+
+Dr Graham J Williams
+Director, Togaware
+
+Adjunct Professor, University of Canberra Adjunct Professor, Australian
+National University
+
+Fellow, Institute of Analytics Professionals of Australia Head, ACT
+Chapter of IAPA
+
+

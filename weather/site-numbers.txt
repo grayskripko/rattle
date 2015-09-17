@@ -1,0 +1,52 @@
+Date: Wed, 27 Jan 2010 12:37:16 +1100
+From: Ian Muirhead <I.Muirhead@bom.gov.au>
+To: "'Graham.Williams@togaware.com'" <Graham.Williams@togaware.com>
+CC: Web Climate requests <webclim@bom.gov.au>,
+        Ian Muirhead <I.Muirhead@bom.gov.au>
+Subject: RE: Concordance from Station Number to Station Code
+        [SEC=UNCLASSIFIED]
+   
+[-- Attachment #1 --]
+[-- Type: text/plain, Encoding: quoted-printable, Size: 2.7K --]
+  
+ Hi Graham.
+  
+Thanks for the positive feedback on Climate Data Online.
+  
+I have attached a list which maps the Daily Weather Observation (DWO)
+location IDs to Bureau station numbers. There are a few things you
+should be aware of before using this however:
+
+1) The list I have provided relates the DWO ID to the site from which
+temperature observations are taken (the primary Bureau site).
+  
+2) DWO location data can be taken from several sites, depending on
+what elements are observed at the primary site. For example: For
+Sydney, temperature, humidity, pressure, cloud and rainfall
+observations are from Sydney (Observatory Hill) {station
+066062}. Evaporation and sunshine observations are from Sydney
++Airport AMO {station 066037}. Wind observations are from Fort Denison
+{station 066022}.
+  
+3) The list is quasi dynamic, in that occasionally the composition of
+the DWO locations are changed (if related sites are closed for
+example).
+  
+4) We may be changing the product later in the year to simply display
+data from just the single primary site. While this may mean that some
+elements may disappear from a DWO location, it +will permit us to
+generate the product for all sites which measure temperature, and over
+all years of record. Currently the construction of what sites to use
+for each DWO location is +manually done, which is difficult to
+maintain, or take backward in time.
+
+I hope that this helps.
+
+Cheers,
+Ian
+
+
+Ian Muirhead
+Data Services, National Climate Centre
+Bureau of Meteorology
+ph 03 9669 4737
