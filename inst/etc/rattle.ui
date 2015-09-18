@@ -2081,6 +2081,20 @@ Contributions also from:
                     <property name="expand">False</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkToolButton" id="connectr_toolbutton">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="label" translatable="yes">Connect R</property>
+                    <property name="stock_id">gtk-network</property>
+                    <signal name="clicked" handler="on_connectr_toolbutton_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
               </object>
             </child>
           </object>
