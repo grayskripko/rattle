@@ -2,7 +2,7 @@
 #
 # BASE FUNCTIONS
 #
-# Time-stamp: <2015-09-16 07:34:27 Graham Williams>
+# Time-stamp: <2015-09-18 21:17:37 gjw>
 #
 # Copyright (c) 2009-2015 Togaware Pty Ltd
 #
@@ -72,8 +72,8 @@ Rtxt <- function(...)
 
 RtxtNT <- Rtxt
 
-VERSION <- "3.5.11"
-DATE <- "2015-09-17"
+VERSION <- "4.0.0"
+DATE <- "2015-09-18"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2015 Togaware Pty Ltd.")
@@ -2823,6 +2823,11 @@ on_rattle_menu_activate <- function(action, window)
 }
 
 on_delete_menu_activate <- notImplemented
+
+on_connectr_toolbutton_clicked <- function(action, window)
+{
+  browseURL("http://connect-r.com/posting.php?mode=post&f=2")
+}
 
 ## Map the unchanged glade defaults
 
