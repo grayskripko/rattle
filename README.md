@@ -11,3 +11,7 @@ installed with:
 
 `> devtools::install_bitbucket("kayontoga/rattle")`
 
+Rattle is developed as an open source product by
+[Togaware](http://www.togaware.com/) and is freely available to
+anyone. Details are at available from the
+[Rattle](http://rattle.togaware.com/) home page.
