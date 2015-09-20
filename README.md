@@ -1,5 +1,13 @@
 # README #
 
-The rattle repository. See the rattle.dev project for a folder one up from this folder in a clone. This rattle folder then sits inside that and the Makefile provided there does the magic to package up locally. This repo is a standard R package that can be installed with 
+The rattle repository is hosted on
+[Bitbucket](https://bitbucket.org/kayontoga/rattle). See the
+[rattle.dev](https://bitbucket.org/kayontoga/rattle.dev) project on
+bitbucket for the development environment sitting over the rattle
+project. This rattle folder then sits inside the rattle.dev folder and
+the Makefile provided with rattle.dev does the processing to package
+up locally. The rattle repository is a standard R package that can be
+installed with:
 
-> devtools::install_bitbucket("kayontoga/rattle")
+`> devtools::install_bitbucket("kayontoga/rattle")`
+
