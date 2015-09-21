@@ -1,4 +1,14 @@
+rattle 4.0.0 Graham.Williams@togaware.com 2015-09-21 06:00:49
+       
+       * Migrate hosting of the package to Bitbucket:
+         https://bitbucket.org/kayontoga/rattle.
+
+       * Use Connect-R logo as the icon for the button.
+
 rattle 3.5.11 Graham.Williams@togaware.com 2015-09-16 19:22:02
+
+       * Add button to toolbar to open a Connect-R page for feature
+         requests.
 
        * Bug fix confusion matrix Error calculation and average error
          calculation. Reported by Eugene Dubossarsky.
