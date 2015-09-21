@@ -2,7 +2,7 @@
 #
 # BASE FUNCTIONS
 #
-# Time-stamp: <2015-09-18 21:17:37 gjw>
+# Time-stamp: <2015-09-21 22:21:48 gjw>
 #
 # Copyright (c) 2009-2015 Togaware Pty Ltd
 #
@@ -73,7 +73,7 @@ Rtxt <- function(...)
 RtxtNT <- Rtxt
 
 VERSION <- "4.0.0"
-DATE <- "2015-09-18"
+DATE <- "2015-09-21"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2015 Togaware Pty Ltd.")
@@ -1004,6 +1004,14 @@ configureGUI <- function()
   else
     crv$icon <- RGtk2::gdkPixbufNewFromFile(crv$icon)$retval
 
+  # 150921 Change the Connect-R button to be the Connect-R logo.
+
+  connectr.logo <- system.file("etc/ConnectRlogo.png", package="rattle")
+  connectr.pixbuf <- RGtk2::gdkPixbufNewFromFile(connectr.logo)$retval
+  connectr.icon <- RGtk2::gtkImageNewFromPixbuf(connectr.pixbuf)
+  connectr.button <- theWidget("connectr_toolbutton")
+  RGtk2::gtkToolButtonSetIconWidget(connectr.button, connectr.icon)
+  
   # 101202 Remove the By Group button and instead if a rescale has a
   # categoric selected then do by group. TODO.
   
