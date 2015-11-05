@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2015-08-21 19:10:47 gjw>
+# Time-stamp: <2015-09-30 06:27:32 gjw>
 #
 # Implement hclust functionality.
 #
@@ -182,6 +182,8 @@ executeClusterHClust <- function(include)
   
   sampling  <- not.null(crs$sample)
 
+  startLog(Rtxt("Hierarchical Cluster"))
+
   # The amap library needs to be loaded for hcluster. Also note that
   # hcluster takes about 0.33 seconds, compared to hclust taking 11
   # seconds!
@@ -261,7 +263,6 @@ executeClusterHClust <- function(include)
 
   # Log the R command.
 
-  startLog(Rtxt("Hierarchical Cluster"))
   appendLog(Rtxt("Generate a hierarchical cluster of the data."),
           hclust.cmd)
   
