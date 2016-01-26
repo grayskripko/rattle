@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-01-26 10:16:11 gjw>
+# Time-stamp: <2016-01-26 17:58:01 gjw>
 #
 # Implement evaluate functionality.
 #
@@ -668,7 +668,7 @@ executeEvaluateTab <- function()
     if (is.null(included)) # || theWidget("score_radiobutton")$getActive())
       testset0 <- "crs$testset"
     else
-      testset0 <- sprintf("crs$testset[,%s]", included)
+      testset0 <- sprintf("crs$testset[,%s,drop=FALSE]", included)
   }
   else if (theWidget("evaluate_rdataset_radiobutton")$getActive())
   {
