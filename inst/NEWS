@@ -1,3 +1,9 @@
+rattle 4.0.6 Graham.Williams@togaware.com 2016-01-26 11:12:01
+
+       * Bug fix calculation of confusion matricies when either actual
+         or predictive values have missing values. Reported by Roger
+         Bohm.
+
 rattle 4.0.0 Graham.Williams@togaware.com 2015-09-21 06:00:49
        
        * Migrate hosting of the package to Bitbucket:
