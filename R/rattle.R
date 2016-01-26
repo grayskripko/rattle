@@ -72,7 +72,7 @@ Rtxt <- function(...)
 
 RtxtNT <- Rtxt
 
-VERSION <- "4.1.0"
+VERSION <- "4.1.1"
 DATE <- "2016-01-26"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
