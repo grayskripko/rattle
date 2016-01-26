@@ -4,6 +4,10 @@ rattle 4.0.6 Graham.Williams@togaware.com 2016-01-26 11:12:01
          or predictive values have missing values. Reported by Roger
          Bohm.
 
+       * Make the rescale.by.group transform more robust by ensuring
+         the by argument is a factor, converting as needed. Reported
+         by Tony Nolan.
+
        * Bug fix for plots when there is no target in the
          dataset. Reported by Albert Lee.
 
