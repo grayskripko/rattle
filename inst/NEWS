@@ -1,3 +1,8 @@
+rattle 4.1.2 Graham.Williams@togaware.com 2016-03-13 06:24:21
+
+       * Bug fix for missing GUI code for
+         export_filechooserdialog. Reported by Bill Burns.
+
 rattle 4.1.1 Graham.Williams@togaware.com 2016-01-26 19:50:07
 
        * Bug fix for a single input variable in the dataset when
