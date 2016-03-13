@@ -25,6 +25,8 @@ fancyRpartPlot(model, main="", sub, palettes, ...)
   Greens Greys Oranges OrRd PuBu PuBuGn PuRd Purples RdPu Reds YlGn
   YlGnBu YlOrBr YlOrRd.}
 
+\item{type}{the type of plot to generate (2).}
+
   \item{...}{additional arguments passed on to prp.}
 
 }
