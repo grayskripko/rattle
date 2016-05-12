@@ -1,8 +1,8 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2015-12-12 11:12:49 gjw>
+# Time-stamp: <2016-05-12 10:14:47 Graham Williams>
 #
-# Copyright (c) 2009-2015 Togaware Pty Ltd
+# Copyright (c) 2009-2016 Togaware Pty Ltd
 
 # These could be in rattle.R
 
@@ -117,7 +117,7 @@ on_aboutdialog_response <- function(object, ...)
   crv$rattleUI <- "rattle.ui"
   # if (Sys.info()["sysname"] == "Darwin") crv$rattleUI <- "rattle_macosx.ui"
 
-  crv$log.intro <- paste("#", sprintf(Rtxt("%s is Copyright (c) 2006-2015 %s."),
+  crv$log.intro <- paste("#", sprintf(Rtxt("%s is Copyright (c) 2006-2016 %s."),
                                       "Rattle", "Togaware Pty Ltd"))
   crv$support.msg <- sprintf(Rtxt("If this is a bug please contact %s.\n\n%s"),
                              "support@togaware.com",
@@ -243,7 +243,7 @@ on_aboutdialog_response <- function(object, ...)
   # 091221 The Rtxt does not seem to work from the rattle.R file, so
   # do it here again.
   
-  COPYRIGHT <- sprintf(Rtxt("Copyright (c) 2006-2015 %s."), "Togaware Pty Ltd")
+  COPYRIGHT <- sprintf(Rtxt("Copyright (c) 2006-2016 %s."), "Togaware Pty Ltd")
 
   msg <- paste(Rtxt("Rattle: A free graphical interface",
                     "for data mining with R."), "\n",
