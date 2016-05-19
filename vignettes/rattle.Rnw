@@ -141,7 +141,7 @@ rattle()
 \item Click the Risk radio button (installs packages as required)
 \item Click Execute to display two Risk (Cummulative) performance plots
 \item Click the Log tab
-\item Click the Export button to save script to file weather_script.R to home folder
+\item Click the Export button to save script to file weather\_script.R to home folder
 \end{enumerate}
 
 Now exit from R (and rattle) and start R up again.
