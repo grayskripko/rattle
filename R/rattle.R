@@ -73,7 +73,7 @@ Rtxt <- function(...)
 RtxtNT <- Rtxt
 
 VERSION <- "4.1.4"
-DATE <- "2016-05-12"
+DATE <- "2016-05-19"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2016 Togaware Pty Ltd.")
