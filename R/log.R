@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2015-11-15 09:22:40 gjw>
+# Time-stamp: <2016-05-19 06:59:04 Graham Williams>
 #
 # Implement LOG functionality.
 #
@@ -45,7 +45,7 @@ initiateLog <- function()
                  #sprintf("# Started %s by %s\n\n", Sys.time(), Sys.info()["user"]),
                  "\n\n",
                  Rtxt("# This log file captures all Rattle interactions as R commands.",
-                      "\n\nExport this log to a file using the Export",
+                      "\n\n# Export this log to a file using the Export",
                       "button or the Tools",
                       "\n# menu to save a log of all your activity. This facilitates",
                       "repeatability. For example, exporting",
