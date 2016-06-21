@@ -48,9 +48,9 @@ weatherAUS}
     \item{\code{Location}}{The common name of the location of the
     weather station.}
 
-    \item{\code{MinTemp}}{The minimum temperature in degrees celcius. }
+    \item{\code{MinTemp}}{The minimum temperature in degrees celsius. }
 
-    \item{\code{MaxTemp}}{The maximum temperature in degrees celcius. }
+    \item{\code{MaxTemp}}{The maximum temperature in degrees celsius. }
 
     \item{\code{Rainfall}}{The amount of rainfall recorded for the day in mm. }
     
@@ -70,10 +70,10 @@ weatherAUS}
     \item{\code{RelHumid9am}}{ Relative humidity (percent) at 9am. }
 
     \item{\code{Cloud9am}}{ Fraction of sky obscured by cloud at
-      9am. This is measrured in "oktas", which are a unit of eighths. It
+      9am. This is measured in "oktas", which are a unit of eigths. It
       records how many eigths of the sky are obscured by cloud. A 0
       measure indicates completely clear sky whilst an 8 indicates that
-      it is copmletely overcast.  }
+      it is completely overcast.  }
 
     \item{\code{WindSpeed9am}}{
       Wind speed (km/hr) averaged over 10 minutes prior to 9am.
