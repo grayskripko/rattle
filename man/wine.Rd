@@ -1,7 +1,7 @@
 \name{wine}
 \docType{data}
 \alias{wine}
-\title{The wine dataset from the UCI Machien Learning Repository.}
+\title{The wine dataset from the UCI Machine Learning Repository.}
 \description{
 
   The \code{wine} dataset contains the results of a chemical analysis of
