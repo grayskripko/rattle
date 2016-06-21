@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2015-11-25 08:31:04 gjw>
+# Time-stamp: <2016-06-21 20:56:32 Graham Williams>
 #
 # Implement EXPLORE functionality.
 #
@@ -707,7 +707,7 @@ executeExplorePlot <- function(dataset,
   # rather than relying on going back to the data tab to change.
     
   target <- theWidget("pairs_color_combobox")$getActiveText()
-  if (length(target) && target == " ") target <- NULL
+  if (length(target) && target == " ") target <- crs$target
     
   # Has the advanced graphics (ggplot2) option be enabled?
 
