@@ -4,6 +4,8 @@ rattle 4.1.7 Graham.Williams@togaware.com 2016-06-21 21:02:13
          Group By will use the target variable to stratify. Reported
          by Eugene Dubossarsky.
 
+       *  Spelling fixes provided by George Wilson.
+
 rattle 4.1.6 Graham.Williams@togaware.com 2016-06-21 20:34:49
 
        * Bug fix for new version of GGally - to get target
