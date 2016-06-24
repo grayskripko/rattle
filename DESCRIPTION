@@ -1,8 +1,8 @@
 Package: rattle
 Type: Package
 Title: Graphical User Interface for Data Mining in R
-Version: 4.1.7
-Date: 2016-06-21
+Version: 4.1.8
+Date: 2016-06-24
 Authors@R: c(person("Graham", "Williams", 
 	   	    role=c("aut", "cph", "cre"),
 	            email="Graham.Williams@togaware.com"),

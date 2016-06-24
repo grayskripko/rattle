@@ -1,6 +1,6 @@
 #' Perform the required operations for displaying a pairs plot.
 #' 
-#' Time-stamp: <2016-06-21 20:33:48 Graham Williams>
+#' Time-stamp: <2016-06-24 20:35:28 Graham Williams>
 #' 
 executePairsPlotSelect2 <- function(dataset, vars, target, targets, stratify, sampling, pmax)
 {
@@ -16,7 +16,7 @@ executePairsPlotSelect2 <- function(dataset, vars, target, targets, stratify, sa
   }
   else
   {
-    colorStr<-sprintf('mapping=ggplot2::aes(colour=%s),',v1)
+    colorStr<-sprintf('mapping=ggplot2::aes(colour=%s, alpha=0.5),',v1)
   }
 
   plot.cmd <- paste0('GGally::ggpairs(', dataset, ',\n',
