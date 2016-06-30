@@ -1,8 +1,8 @@
 Package: rattle
 Type: Package
 Title: Graphical User Interface for Data Mining in R
-Version: 4.1.8
-Date: 2016-06-24
+Version: 4.1.9
+Date: 2016-06-30
 Authors@R: c(person("Graham", "Williams", 
 	   	    role=c("aut", "cph", "cre"),
 	            email="Graham.Williams@togaware.com"),
@@ -18,11 +18,13 @@ Authors@R: c(person("Graham", "Williams",
 	     person("Jose", "Magana", role="ctb",
                     comment="Contributed the ggpairs plots."))
 Depends: R (>= 2.13.0)
-Imports: stats, utils, grDevices, graphics, methods, RGtk2, magrittr, stringi, stringr
+Imports: stats, utils, grDevices, graphics, methods, RGtk2, magrittr, 
+  stringi, stringr
 Suggests: pmml (>= 1.2.13), bitops, colorspace, 
   ada, amap, arules, arulesViz, biclust, cairoDevice,
   cba, cluster, corrplot, descr, doBy, dplyr, e1071, ellipse, fBasics, foreign, fpc, 
-  gdata, ggdendro, ggplot2, gplots, graph, grid, gridExtra, gtools, gWidgetsRGtk2, 
+  gdata, ggdendro, ggplot2, ggraptr, gplots, graph, grid, 
+  gridExtra, gtools, gWidgetsRGtk2, 
   hmeasure, Hmisc, kernlab, Matrix, mice,
   nnet, odfWeave, party, playwith, plyr, psych, 
   randomForest, RBGL, RColorBrewer, readxl, reshape, rggobi,
