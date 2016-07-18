@@ -4439,8 +4439,9 @@ Contributions also from:
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="explore_interactive_plotbuilder_radiobutton">
-                                    <property name="label" translatable="yes">Plot Builder</property>
+                                  <object class="GtkRadioButton" id="explore_interactive_ggraptr_radiobutton">
+                                    <property name="label" translatable="yes">GGRaptR</property>
+                                    <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="use_action_appearance">False</property>
