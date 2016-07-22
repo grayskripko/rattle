@@ -1,15 +1,15 @@
 #' Build a random forest model: traditional or conditional.
 #' 
-#' Time-stamp: <2016-07-22 09:10:30 Graham Williams>
+#' Time-stamp: <2016-07-22 22:06:58 Graham Williams>
 #'
 executeModelRF <- function(traditional=TRUE, conditional=!traditional)
 {
-  ## 160722
+  # 160722
   #
   # We might consider adding wsrf and rxDecisionForest and
   # mxFastForest.
 
-  ## Setup
+  ## SETUP
   
   # Decide which random forest to build: randomForest or cforest
   
@@ -28,7 +28,7 @@ executeModelRF <- function(traditional=TRUE, conditional=!traditional)
   
   TV <- "rf_textview"
 
-  ## Build the function call.
+  ## BUILD THE FUNCTION CALL
   
   num.classes <-
     crs$target %>%
@@ -54,20 +54,21 @@ executeModelRF <- function(traditional=TRUE, conditional=!traditional)
     for (i in categoricals)
       if (length(levels(crs$dataset[,i])) > 32)
       {
-        errorDialog(sprintf(Rtxt("This implementation of random forests does not",
-                                 "handle categorical variables with more than",
-                                 "32 levels.",
-                                 "Having a large number of levels tends to introduce",
-                                 "bias into the tree algorithms. The variable %s has",
-                                 "%d levels\n\nPlease choose to ignore it in the",
-                                 "Data tab if you wish to build a",
-                                 "random forest model."),
-                            i, length(levels(crs$dataset[,i]))))
+        Rtxt("This implementation of random forests does not",
+             "handle categorical variables with more than",
+             "32 levels.",
+             "Having a large number of levels tends to introduce",
+             "bias into the tree algorithms. The variable %s has",
+             "%d levels\n\nPlease choose to ignore it in the",
+             "Data tab if you wish to build a",
+             "random forest model.") %>%
+          sprintf(i, length(levels(crs$dataset[,i]))) %>%
+          errorDialog()
         return(FALSE)
       }
   }
 
-  ## Retrieve options and set up the function arguments.
+  ## RETRIEVE OPTIONS AND SET UP FUNCTION ARGUMENTS
 
   # We use the supplied values even if they have not been changed from
   # the defaults (crv$rf.ntree.default, crv$rf.mtry.default). The
@@ -197,14 +198,14 @@ executeModelRF <- function(traditional=TRUE, conditional=!traditional)
     }
   }
     
-  # Start the log.
+  # START THE LOG
   
   startLog()
 
-  # Build the model.
+  # BUILD THE MODEL
 
   rf.cmd <-
-    paste("set.seed(crv$seed)\n",
+    paste("set.seed(crv$seed)\n\n",
           "crs$rf <- ", FUN, "(", frml,
           ",\n  data=",
           dataset, ", ",
@@ -271,11 +272,13 @@ executeModelRF <- function(traditional=TRUE, conditional=!traditional)
       #
       # sum(crs$dataset[crs$sample,c(2:10, 13:14)]==-Inf, na.rm=TRUE)
       
-      errorDialog(sprintf(Rtxt("The call to '%s' failed.",
-                               "The problem may be with the data",
-                               "containing Infinite values.",
-                               "A quick solution may be to remove variables",
-                               "with any Inf or -Inf values."), FUN))
+      Rtxt("The call to '%s' failed.",
+           "The problem may be with the data",
+           "containing Infinite values.",
+           "A quick solution may be to remove variables",
+           "with any Inf or -Inf values.") %>%
+        sprintf(FUN) %>%
+        errorDialog()
                           
       setTextview(TV)
     }
@@ -286,16 +289,18 @@ executeModelRF <- function(traditional=TRUE, conditional=!traditional)
       # been fixed. Of course i could try to figure it out myself, but
       # it would probably take some effort!
       
-      errorDialog(Rtxt("The call to randomForest failed.",
-                       "You probably have version 4.5-25.",
-                       "This is a known problem and is fixed in 4.5-26.",
-                       "Please install a newer version of randomForest.\n",
-                       "\ninstall.packages('randomForest',\n",
-                       "    repos='http://rattle.togaware.com')"))
+      Rtxt("The call to randomForest failed.",
+           "You probably have version 4.5-25.",
+           "This is a known problem and is fixed in 4.5-26.",
+           "Please install a newer version of randomForest.\n",
+           "\ninstall.packages('randomForest',\n",
+           "    repos='http://rattle.togaware.com')") %>%
+        errorDialog()
+      
       setTextview(TV)
     }
     else 
-      errorDialog(errorMessageFun(FUN, result))
+      errorMessageFun(FUN, result) %>% errorDialog()
     return(FALSE)
   }
 
@@ -326,7 +331,7 @@ executeModelRF <- function(traditional=TRUE, conditional=!traditional)
       packageIsAvailable("pROC", Rtxt("calculate AUC confidence interval")))
   {
     roc.cmd <- "pROC::roc(crs$rf$y, as.numeric(crs$rf$predicted))"
-    ci.cmd <- "pROC::ci.auc(crs$rf$y, as.numeric(crs$rf$predicted))"
+    ci.cmd  <- "pROC::ci.auc(crs$rf$y, as.numeric(crs$rf$predicted))"
 
     appendLog(Rtxt("The `pROC' package implements various AUC functions."))
 
