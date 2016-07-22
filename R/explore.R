@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-06-30 08:20:25 Graham Williams>
+# Time-stamp: <2016-07-22 10:44:58 Graham Williams>
 #
 # Implement EXPLORE functionality.
 #
@@ -120,7 +120,7 @@ executeExploreTab <- function()
     if (theWidget("explore_interactive_ggobi_radiobutton")$getActive())
       executeExploreGGobi(dataset, crs$dataname)
     else if (theWidget("explore_interactive_ggraptr_radiobutton")$getActive())
-      executeGGRaptR()
+      executeExploreGGRaptR(crs$dataname)
 #    else if (theWidget("explore_interactive_plotbuilder_radiobutton")$getActive())
 #      executeExplorePlotBuilder()
   }
