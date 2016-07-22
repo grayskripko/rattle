@@ -1,3 +1,11 @@
+rattle 4.1.9 Graham.Williams@togaware.com 2016-07-22 06:19:15
+
+       * Include dplyr as an Import.
+
+       * Add support for Eugene Dubassarsky's ggraptr.
+
+       * Cleanup and perfect executeModelRF and Log code.
+
 rattle 4.1.8 Graham.Williams@togaware.com 2016-06-24 20:36:51
 
        * Add transparency to ggpairs plot. Reported by Eugene
