@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2015-11-15 09:02:15 gjw>
+# Time-stamp: <2016-08-31 09:35:06 Graham Williams>
 #
 # DATA TAB
 #
@@ -240,6 +240,14 @@ updateFilenameFilters <- function(button, fname)
       ff$setName(Rtxt("TXT Files"))
       ff$addPattern("*.txt")
       button$addFilter(ff)
+
+      if (packageIsAvailable("RevoScaleR"))
+      {
+        ff <- RGtk2::gtkFileFilterNew()
+        ff$setName(Rtxt("XDF Files"))
+        ff$addPattern("*.xdf")
+        button$addFilter(ff)
+      }
 
       ff <- RGtk2::gtkFileFilterNew()
       ff$setName(Rtxt("Excel Files"))
@@ -867,7 +875,7 @@ executeDataCSV <- function(filename=NULL)
   }
   else if (is.null(filename))
   {
-    if (! questionDialog(sprintf(Rtxt("No CSV filename has been provided.",
+    if (! questionDialog(sprintf(Rtxt("No filename has been provided.",
                                       "\n\nWe require a dataset to be loaded.",
                                       "\n\nWould you like to use the example",
                                       "%s dataset?"),
@@ -967,6 +975,21 @@ executeDataCSV <- function(filename=NULL)
                               'encoding="%s")'),
                         crv$sample.dataset, crv$csv.encoding)
 
+  else if (tolower(get.extension(filename)) %in% c("xdf"))
+  {
+    if (! packageIsAvailable("RevoScaleR", Rtxt("manage .xdf Microsoft R data"))) return(FALSE)
+    # read.cmd <- sprintf(paste('crs$dataset <- RevoScaleR::rxImport("%s")'),
+    #                     sub("file:///", ifelse(isWindows(), "", "/"), filename))
+    # read.cmd <- sprintf(paste('crs$dataset <- RevoScaleR::RxXdfData("%s")'),
+    #                     sub("file:///", ifelse(isWindows(), "", "/"), filename))
+    read.cmd <- sprintf(paste('crs$dataset <- RevoScaleR::rxDataStep("%s",',
+                              '"%s", overwrite=TRUE)'),
+                        sub("file:///", ifelse(isWindows(), "", "/"), filename),
+                        sub("file:///", ifelse(isWindows(), "", "/"),
+                            sub(".xdf", "_rattle.xdf", filename)))
+    crs$xdf <- TRUE
+  }
+  
   else if (tolower(get.extension(filename)) %in% c("xls", "xlsx"))
   {
     if (! packageIsAvailable("readxl", Rtxt("read .xls or .xlsx files"))) return(FALSE)
@@ -1079,7 +1102,7 @@ executeDataCSV <- function(filename=NULL)
 
 ##  showDataViewButtons()
 
-  setStatusBar(sprintf(Rtxt("The CSV file has been loaded: %s.",
+  setStatusBar(sprintf(Rtxt("The file has been loaded: %s.",
                             "Please wait whilst we extract its structure..."),
                        crs$dataname))
 
@@ -3143,6 +3166,14 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
   
   if (autoroles && length(given.target) > 0) target <- variables[given.target[1]]
 
+  # 160816 For XDF, replace all crs$dataset[,XX] with
+  # head(crs$dataset,1)[,XX] to get the column meta information since
+  # we only need a single row from the datraset to do that and using
+  # head() converts xdf to data.frame. Cache once and use throughout
+  # the rest of the function.
+
+  hds <- head(crs$dataset, 1)
+    
   if (autoroles && is.null(target))
   {
     # Find the last variable that is not an IMP (imputed). This is
@@ -3157,26 +3188,26 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
     }
 
     target <- -1
-    if ((is.factor(crs$dataset[,last.var]) &&
-         length(levels(crs$dataset[,last.var])) > 1 &&
-         length(levels(crs$dataset[,last.var])) < 11)
-        || (length(levels(as.factor(crs$dataset[,last.var]))) < 11
-            && length(levels(as.factor(crs$dataset[,last.var]))) > 1))
+    if ((is.factor(hds[,last.var]) &&
+         length(levels(hds[,last.var])) > 1 &&
+         length(levels(hds[,last.var])) < 11)
+        || (length(levels(as.factor(hds[,last.var]))) < 11
+            && length(levels(as.factor(hds[,last.var]))) > 1))
       target <- last.var
-    else if ((is.factor(crs$dataset[,1]) &&
-              length(levels(crs$dataset[,1])) > 1 &&
-              length(levels(crs$dataset[,1])) < 11)
-             || (length(levels(as.factor(crs$dataset[,1]))) < 11
-                 && length(levels(as.factor(crs$dataset[,1]))) > 1))
+    else if ((is.factor(hds[,1]) &&
+              length(levels(hds[,1])) > 1 &&
+              length(levels(hds[,1])) < 11)
+             || (length(levels(as.factor(hds[,1]))) < 11
+                 && length(levels(as.factor(hds[,1]))) > 1))
       target <- 1
     else
       for (i in 2:(length(variables)-1))
       {
-        if ((is.factor(crs$dataset[,i]) &&
-             length(levels(crs$dataset[,i])) > 1 &&
-              length(levels(crs$dataset[,i])) < 11)
-            || (length(levels(as.factor(crs$dataset[,i]))) < 11
-                && length(levels(as.factor(crs$dataset[,i]))) > 1))
+        if ((is.factor(hds[,i]) &&
+             length(levels(hds[,i])) > 1 &&
+              length(levels(hds[,i])) < 11)
+            || (length(levels(as.factor(hds[,i]))) < 11
+                && length(levels(as.factor(hds[,i]))) > 1))
         {
           target <- i
           break
@@ -3229,7 +3260,7 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
 
     iter <- model$append()$iter
 
-    cl <- class(crs$dataset[[variables[i]]])
+    cl <- class(hds[[variables[i]]])
 
     # 110312 There is a case where cl might be "character". This was
     # noticed, for example, when loading a .RData file with a column
@@ -3238,8 +3269,8 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
 
     if ("character" %in% cl)
     {
-      crs$dataset[[variables[i]]] <- as.factor(crs$dataset[[variables[i]]])
-      cl <- class(crs$dataset[[variables[i]]])
+      crs$dataset[[variables[i]]] <- as.factor(crs$dataset[[variables[i]]]) # 160831 XDF TODO
+      cl <- class(crs$dataset[[variables[i]]]) # 160831 XDF TODO
     }
     
     # 090320 Change "ordered" to Categoric below, so maybe don't need
@@ -3290,7 +3321,7 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
       }
       else if ("factor" %in% cl)
       {
-        lv <- length(levels(crs$dataset[[variables[i]]]))
+        lv <- length(levels(hds[[variables[i]]]))
         if (nrow(crs$dataset) > crv$ident.min.rows && lv == nrow(crs$dataset))
         {
           cl <- "ident"
@@ -3304,7 +3335,7 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
       }
       else
       {
-        lv <- length(levels(as.factor(crs$dataset[[variables[i]]])))
+        lv <- length(levels(as.factor(hds[[variables[i]]])))
         # 090704 Start supporting a Date format
         if (length(intersect(c("integer", "POSIXt"), cl)) &&
             nrow(crs$dataset) > crv$ident.min.rows &&
@@ -3313,11 +3344,11 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
           cl <- "ident"
           ident <- c(ident, variables[i])
         }
-        else if (all(is.na(crs$dataset[[variables[i]]])))
+        else if (all(is.na(hds[[variables[i]]])))
         {
           cl <- "missing"
           ignore <- c(ignore, variables[i])
-        }
+        } # 160831 XDF TODO sd of a column in XDF? Actually it's testing for a constant
         else if (sd(crs$dataset[[variables[i]]], na.rm=TRUE) %in% c(NA, 0))
         {
           # sd is NA if all data items are NA.
@@ -3327,7 +3358,7 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
       }
     }
 
-    # Fix any doubling up
+    # Fix any doubling up.
 
     input <- setdiff(input, target)
     if (length(target) && length(ident) && target %in% ident)
@@ -3346,12 +3377,12 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
 
     input <- setdiff(setdiff(setdiff(input, ignore), ident), risk)
 
-    missing.count <- sum(is.na(crs$dataset[[variables[i]]]))
+    missing.count <- sum(is.na(crs$dataset[[variables[i]]])) # 160831 XDF TODO
 
-    unique.count <- length(unique(na.omit(crs$dataset[[variables[i]]])))
-    unique.value <- unique(crs$dataset[[variables[i]]])
+    unique.count <- length(unique(na.omit(crs$dataset[[variables[i]]]))) # 160831 XDF TODO
+    unique.value <- unique(crs$dataset[[variables[i]]])  # 160831 XDF TODO
 
-    numeric.var <- is.numeric(crs$dataset[[variables[i]]])
+    numeric.var <- is.numeric(hds[[variables[i]]])
     possible.categoric <- (unique.count <= crv$max.categories ||
                            theWidget("data_target_categoric_radiobutton")$
                            getActive())
@@ -3412,31 +3443,31 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
       dtype <- paste("A ", cl, " variable")
       if (cl == "integer")
         dtype <- sprintf(Rtxt("Numeric [%d to %d; unique=%d; mean=%d; median=%d%s%s]"),
-                         min(crs$dataset[[variables[i]]], na.rm=TRUE),
-                         max(crs$dataset[[variables[i]]], na.rm=TRUE),
+                         min(crs$dataset[[variables[i]]], na.rm=TRUE), # 160831 XDF TODO
+                         max(crs$dataset[[variables[i]]], na.rm=TRUE), # 160831 XDF TODO
                          unique.count,
-                         as.integer(mean(crs$dataset[[variables[i]]],
+                         as.integer(mean(crs$dataset[[variables[i]]], # 160831 XDF TODO
                                          na.rm=TRUE)),
-                         as.integer(median(crs$dataset[[variables[i]]],
+                         as.integer(median(crs$dataset[[variables[i]]], # 160831 XDF TODO
                                          na.rm=TRUE)),
-                         ifelse(sum(is.na(crs$dataset[[variables[i]]])),
+                         ifelse(sum(is.na(crs$dataset[[variables[i]]])), # 160831 XDF TODO
                                 sprintf(Rtxt("; miss=%d"),
-                                        sum(is.na(crs$dataset[[variables[i]]]))),
+                                        sum(is.na(crs$dataset[[variables[i]]]))), # 160831 XDF TODO
                                 ""),
                          ifelse(variables[i] %in% ignore, Rtxt("; ignored"), ""))
       else if (cl == "numeric")
         dtype <- sprintf(Rtxt("Numeric [%.2f to %.2f; unique=%d; mean=%.2f; median=%.2f%s%s]"),
-                         min(crs$dataset[[variables[i]]], na.rm=TRUE),
-                         max(crs$dataset[[variables[i]]], na.rm=TRUE),
+                         min(crs$dataset[[variables[i]]], na.rm=TRUE), # 160831 XDF TODO
+                         max(crs$dataset[[variables[i]]], na.rm=TRUE), # 160831 XDF TODO
                          unique.count,
-                         mean(crs$dataset[[variables[i]]], na.rm=TRUE),
-                         median(crs$dataset[[variables[i]]], na.rm=TRUE),
+                         mean(crs$dataset[[variables[i]]], na.rm=TRUE), # 160831 XDF TODO
+                         median(crs$dataset[[variables[i]]], na.rm=TRUE), # 160831 XDF TODO
                          ifelse(missing.count > 0,
                                 sprintf(Rtxt("; miss=%d"), missing.count), ""),
                          ifelse(variables[i] %in% ignore, Rtxt("; ignored"), ""))
       else if (substr(cl, 1, 6) == "factor")
         dtype <- sprintf(Rtxt("Categorical [%s levels%s%s]"),
-                         length(levels(crs$dataset[[variables[i]]])),
+                         length(levels(hds[[variables[i]]])),
                          ifelse(missing.count > 0,
                                 sprintf(Rtxt("; miss=%d"), missing.count), ""),
                          ifelse(variables[i] %in% ignore, Rtxt("; ignored"), ""))
@@ -3466,7 +3497,7 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
       ## above to add in the number of levels, so do it here.
 
       if (cl == "factor")
-        cl <- paste(cl, length(levels(crs$dataset[[variables[i]]])))
+        cl <- paste(cl, length(levels(hds[[variables[i]]])))
 
       catiter <- categorical$append()$iter
       categorical$set(catiter,
@@ -3493,10 +3524,10 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
                      crv$CONTINUOUS["paiplot"], variables[i] %in% paiplot,
                      crv$CONTINUOUS["comment"],
                      sprintf("%.2f; %.2f/%.2f; %.2f",
-                             min(crs$dataset[,i], na.rm=TRUE),
-                             median(crs$dataset[,i], na.rm=TRUE),
-                             mean(crs$dataset[,i], na.rm=TRUE),
-                             max(crs$dataset[,i], na.rm=TRUE)))
+                             min(crs$dataset[,i], na.rm=TRUE), # 160831 XDF TODO
+                             median(crs$dataset[,i], na.rm=TRUE), # 160831 XDF TODO
+                             mean(crs$dataset[,i], na.rm=TRUE), # 160831 XDF TODO
+                             max(crs$dataset[,i], na.rm=TRUE))) # 160831 XDF TODO
     }
   }
 
@@ -3518,13 +3549,13 @@ createVariablesModel <- function(variables, input=NULL, target=NULL,
       (substr(risk, 1, 6) == "STATUS" ||
        substr(variables[i], 1, 5) == "EVENT"))
     theWidget("data_target_survival_radiobutton")$setActive(TRUE)
-#  else if (is.numeric(crs$dataset[[crs$target]]) &&
+#  else if (is.numeric(hds[[crs$target]]) &&
 #           # 080505 TODO we should put 10 as a global CONST
-#           length(levels(as.factor(crs$dataset[[crs$target]]))) > 10)
+#           length(levels(as.factor(crs$dataset[[crs$target]]))) > 10)  # 160831 XDF TODO
 #    theWidget("data_target_numeric_radiobutton")$setActive(TRUE)
-#  else if (is.factor(crs$dataset[[crs$target]]) ||
-#           (is.numeric(crs$dataset[[crs$target]]) &&
-#            length(levels(as.factor(crs$dataset[[crs$target]]))) <= 10))
+#  else if (is.factor(hds[[crs$target]]) ||
+#           (is.numeric(hds[[crs$target]]) &&
+#            length(levels(as.factor(crs$dataset[[crs$target]]))) <= 10)) # 160831 XDF TODO
 #    theWidget("data_target_categoric_radiobutton")$setActive(TRUE)
   else
 
@@ -3582,8 +3613,10 @@ getIncludedVariables <- function(numonly=FALSE, listall=FALSE, risk=FALSE, targe
   else
     ri <- NULL
 
+  # 160812 XDF Use head to auto convert XDF to data frame.
+  
   if (numonly)
-    fl <- seq(1,ncol(crs$dataset))[as.logical(sapply(crs$dataset, is.numeric))]
+    fl <- seq(1,ncol(crs$dataset))[as.logical(sapply(head(crs$dataset, 1), is.numeric))]
   else
     fl <- 1:ncol(crs$dataset)
 
@@ -3611,8 +3644,10 @@ inputVariables <- function(numonly=FALSE)
     stop(Rtxt("no input variables specified"))
   }
 
+  # 160812 XDF Use head to auto convert XDF to data frame.
+  
   if (numonly)
-    fl <- seq(1,ncol(crs$dataset))[as.logical(sapply(crs$dataset, is.numeric))]
+    fl <- seq(1,ncol(crs$dataset))[as.logical(sapply(head(crs$dataset, 1), is.numeric))]
   else
     fl <- 1:ncol(crs$dataset)
 
@@ -3631,8 +3666,10 @@ used.variables <- function(numonly=FALSE)
 
   ii <- union(getVariableIndicies(crs$ignore), getVariableIndicies(crs$ident))
 
+  # 160812 XDF Use head to auto convert XDF to data frame.
+
   if (numonly)
-    fl <- seq(1,ncol(crs$dataset))[as.logical(sapply(crs$dataset, is.numeric))]
+    fl <- seq(1,ncol(crs$dataset))[as.logical(sapply(head(crs$dataset, 1), is.numeric))]
   else
     fl <- 1:ncol(crs$dataset)
 
@@ -3648,8 +3685,10 @@ getCategoricVariables <- function(type="string", include.target=F )
   # INPUT role. If type is "names" than return the list of variable
   # names.
 
+  # 160812 XDF Use head to auto convert XDF to data frame.
+  
   include <- NULL
-  cats <- seq(1,ncol(crs$dataset))[as.logical(sapply(crs$dataset, is.factor))]
+  cats <- seq(1,ncol(crs$dataset))[as.logical(sapply(head(crs$dataset, 1), is.factor))]
   if (length(cats) > 0)
   {
 
@@ -3672,7 +3711,9 @@ getNumericVariables <- function(type="string")
   # a list of indicies rather than the default string that needs to be
   # executed to identfy the indicies.
 
-  nums <- seq(1,ncol(crs$dataset))[as.logical(sapply(crs$dataset, is.numeric))]
+  # 160812 Use XDF head to auto convert XDF to data frame.
+  
+  nums <- seq(1,ncol(crs$dataset))[as.logical(sapply(head(crs$dataset, 1), is.numeric))]
   if (length(nums) > 0)
   {
     indicies <- intersect(nums, getVariableIndicies(crs$input))
