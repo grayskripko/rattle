@@ -2,7 +2,7 @@
 #
 # BASE FUNCTIONS
 #
-# Time-stamp: <2016-05-12 10:15:04 Graham Williams>
+# Time-stamp: <2016-08-11 12:34:07 Graham Williams>
 #
 # Copyright (c) 2009-2016 Togaware Pty Ltd
 #
@@ -73,7 +73,7 @@ Rtxt <- function(...)
 RtxtNT <- Rtxt
 
 VERSION <- "4.1.9"
-DATE <- "2016-07-22"
+DATE <- "2016-09-01"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2016 Togaware Pty Ltd.")
@@ -1474,6 +1474,7 @@ resetRattle <- function(new.dataset=TRUE)
 
     crs$dataset  <- NULL
     crs$dataname <- NULL
+    crs$xdf      <- FALSE
     # crs$dwd      <- NULL
     crs$mtime    <- NULL
     crs$input    <- NULL
