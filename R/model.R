@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2015-05-17 08:57:27 gjw>
+# Time-stamp: <2016-08-11 12:44:27 Graham Williams>
 #
 # MODEL TAB
 #
@@ -244,6 +244,7 @@ commonName <- function(mtype)
                          kmeans=Rtxt("KMeans"),
                          rf=Rtxt("Random Forest"),
                          rpart=Rtxt("Decision Tree"),
+                         rxdtree=Rtxt("Big Data Decision Tree"),
                          svm=Rtxt("SVM"),
                          ksvm=Rtxt("SVM"),
                          glm=Rtxt("Linear"),
@@ -480,7 +481,15 @@ executeModelTab <- function()
     {
       setStatusBar(sprintf(Rtxt("Building %s model ..."), commonName(crv$RPART)))
 
-      if (theWidget("model_tree_ctree_radiobutton")$getActive())
+      if (crs$xdf)
+      {
+        if (executeModelRxDTree())
+          theWidget("evaluate_rpart_checkbutton")$setActive(TRUE)
+        else
+          setStatusBar(sprintf(Rtxt("Building %s model ... failed."),
+                               commonName("rxdtree")))
+      }
+      else if (theWidget("model_tree_ctree_radiobutton")$getActive())
       {
         if (executeModelCTree())
           theWidget("evaluate_rpart_checkbutton")$setActive(TRUE)
