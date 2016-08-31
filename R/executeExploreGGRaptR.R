@@ -1,6 +1,6 @@
 #' Perform the required operations for displaying interactive plot generator.
 #' 
-#' Time-stamp: <2016-07-22 10:45:12 Graham Williams>
+#' Time-stamp: <2016-07-24 16:38:40 Graham Williams>
 #' 
 executeExploreGGRaptR <- function(dataset.name)
 {
@@ -8,7 +8,9 @@ executeExploreGGRaptR <- function(dataset.name)
   
   startLog(Rtxt("Display interactive plot builder."))
 
-  ggraptR::ggraptR(dataset.name) # NEED TO DETATCH?
+  cmd <- 'ggraptR::ggraptR(rattle.dataset.for.ggraptR)'
+  appendLog("Initiate the ggraptR applicaiton in a browser", cmd)
+  eval(parse(text=cmd))  # NEED TO DETATCH?
   return()
   
   varsi <- getVariableIndicies(vars)
