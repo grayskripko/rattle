@@ -33,8 +33,9 @@
   creating a new project for it on the Connect-R crowd sourcing
   service.</tooltip>
   <tooltip widget="data_csv_radiobutton">Load data from a comma
-    separated value (CSV) file, as might be exported from a
-    spreadsheet or database.</tooltip>
+    separated value (CSV) file as might be exported from a
+    spreadsheet or database, or a Microsoft XDF file based
+    dataset for big data.</tooltip>
   <tooltip widget="data_arff_radiobutton">Load data from an ARFF file
     (CSV with data types) as is used with the Weka data mining
     tool.</tooltip>
