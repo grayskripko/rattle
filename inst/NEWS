@@ -1,4 +1,8 @@
-rattle 4.1.9 Graham.Williams@togaware.com 2016-07-22 06:19:15
+rattle 5.0.0 Graham.Williams@togaware.com
+
+       * Initial support for the XDF format.
+
+rattle 4.2.0 Graham.Williams@togaware.com 2016-07-22 06:19:15
 
        * Include dplyr as an Import.
 
