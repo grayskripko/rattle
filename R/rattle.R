@@ -2,7 +2,7 @@
 #
 # BASE FUNCTIONS
 #
-# Time-stamp: <2016-08-11 12:34:07 Graham Williams>
+# Time-stamp: <2016-09-04 10:04:11 Graham Williams>
 #
 # Copyright (c) 2009-2016 Togaware Pty Ltd
 #
@@ -72,8 +72,8 @@ Rtxt <- function(...)
 
 RtxtNT <- Rtxt
 
-VERSION <- "4.1.9"
-DATE <- "2016-09-01"
+VERSION <- "5.0.0"
+DATE <- "2016-09-04"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2016 Togaware Pty Ltd.")
@@ -592,6 +592,7 @@ rattle <- function(csvname=NULL, dataset=NULL, useGtkBuilder=NULL)
 
   crv$GLM   	<- "glm"
   crv$RPART 	<- "rpart"
+  crv$RXDTREE 	<- "rxdtree"
   #GBM <- "gbm"
   crv$ADA   	<- "ada"
   crv$RF    	<- "rf"
@@ -1474,7 +1475,7 @@ resetRattle <- function(new.dataset=TRUE)
 
     crs$dataset  <- NULL
     crs$dataname <- NULL
-    crs$xdf      <- FALSE
+    crs$xdf      <- NULL
     # crs$dwd      <- NULL
     crs$mtime    <- NULL
     crs$input    <- NULL
@@ -1903,16 +1904,23 @@ variablesHaveChanged <- function(action)
 
 # 110703: I used to test if the package name was in the result from
 # installed.packages(), but as Brian Ripley points out and from the
-# man page for the function, installed.packages() is very slow on
-# MS/Windows and on networked file systems as it touches a couple of
-# files for each package, and with over a thousand packages installed
-# that will be a lot of files. So simply check for the package using
-# system.file().
+# man page for the function itself, installed.packages() is very slow
+# on MS/Windows and on networked file systems as it touches a couple
+# of files for each package, and with over a thousand packages
+# installed that will be a lot of files. So simply check for the
+# package using system.file().
 
 package.installed <- function(package) nchar(system.file(package=package)) > 0
   
-packageIsAvailable <- function(pkg, msg=NULL)
+packageIsAvailable <- function(pkg, msg=NULL, use.git=FALSE, alt.msg=NULL)
 {
+  # 160904 XDF TODO Add new arguments use.git and alt.msg. The package
+  # dplyrXdf, for example, is available from github rather than
+  # CRAN. So use.git is set to the github (or other) URL for
+  # installing the package. The package RevoScaleR is not readily
+  # available and so we need to have an alternative message to say
+  # that this needs to be obtained from Microsoft.
+  
   appname <- ifelse(exists("crv") && ! is.null(crv$appname), crv$appname, "Rattle")
   localmsg <- sprintf(Rtxt("The package '%s' is required to %s.",
                            "It does not appear to be installed.",
@@ -1926,11 +1934,18 @@ packageIsAvailable <- function(pkg, msg=NULL)
   if (! package.installed(pkg))
   {
     if (not.null(msg))
+    {
       if (questionDialog(localmsg))
       {
         install.packages(pkg)
         return(TRUE)
       }
+    }
+    else if (not.null(alt.msg))
+    {
+      infoDialog(alt.msg)
+      return(FALSE)
+    }
     return(FALSE)
   }
   else
@@ -2906,7 +2921,6 @@ configureAbout <- function(ab)
 #XX#                      "\nevaluated the program and accept the program as is."))
 
 }
-
 
 on_paste1_activate <- notImplemented
 on_copy1_activate <- notImplemented
