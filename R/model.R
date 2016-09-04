@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-08-11 12:44:27 Graham Williams>
+# Time-stamp: <2016-09-01 15:40:54 Graham Williams>
 #
 # MODEL TAB
 #
@@ -481,7 +481,7 @@ executeModelTab <- function()
     {
       setStatusBar(sprintf(Rtxt("Building %s model ..."), commonName(crv$RPART)))
 
-      if (crs$xdf)
+      if (! is.null(crs$xdf))
       {
         if (executeModelRxDTree())
           theWidget("evaluate_rpart_checkbutton")$setActive(TRUE)
