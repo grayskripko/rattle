@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-01-26 17:58:01 gjw>
+# Time-stamp: <2016-09-04 11:29:19 Graham Williams>
 #
 # Implement evaluate functionality.
 #
@@ -518,15 +518,46 @@ executeEvaluateTab <- function()
                                                commonName(crv$SURVIVAL))))
     return()
 
-  if(theWidget("evaluate_score_radiobutton")$getActive())
-    startLog(Rtxt("Score a dataset."))
+  # Identify the data on which evaluation is to be performed. 160903
+  # With the introduction of the support for XDF we added the
+  # following variables and use them in the code string construction
+  # rather than literals all the time. This is a migration in progress
+  # and focussed currently on XDF proof of concept. Lots of potential
+  # to tidy up this code.
+
+  if (not.null(crs$xdf))
+  {
+    testset0 <- "crs$xdf.split"
+    training <- "[[1]]"
+    validate <- "[[2]]"
+    testing  <- "[[3]]"
+  }
   else
-    startLog(Rtxt("Evaluate model performance."))
-
-  # Identify the data on which evaluation is to be performed.
-
-  testset0 <- "crs$dataset"
+  {
+    testset0 <- "crs$dataset"
+    training <- "[crs$sample,]"
+    validate <- "[crs$validate,]"
+    testing  <- "[crs$test,]"
+  }
+    
   testname <- crs$dataname
+
+
+  ds.type <- ifelse(theWidget("evaluate_training_radiobutton")$getActive(),
+                    "the training",
+                    ifelse(theWidget("evaluate_validation_radiobutton")$getActive(),
+                           "the validation",
+                           ifelse(theWidget("evaluate_testing_radiobutton")$getActive(),
+                                  "the testing",
+                                  ifelse(theWidget("evaluate_csv_radiobutton")$getActive(),
+                                         "a CSV file",
+                                         ifelse(theWidget("evaluate_rdataset_radiobutton")$getActive(),
+                                         "an R", "the full")))))
+  
+  if(theWidget("evaluate_score_radiobutton")$getActive())
+    startLog(Rtxt("Score", ds.type, "dataset."))
+  else
+    startLog(Rtxt("Evaluate model performance on", ds.type, "dataset."))
 
   # 081028 For included we only need the input variables and perhaps
   # the risk variable. But after changing the definition of the
@@ -557,43 +588,65 @@ executeEvaluateTab <- function()
                       "load a separate test dataset from a CSV File or a",
                       "pre-existing R Dataset here."))
 
-    if (theWidget("data_sample_checkbutton")$getActive())
-      if (is.null(included))
-        testset0 <- "crs$dataset[crs$sample,]"
-      else
-        testset0 <- sprintf("crs$dataset[crs$sample, %s]", included)
+    if (not.null(crs$xdf))
+      testset0 <- paste0(testset0, training)
     else
-      if (is.null(included))
-        testset0 <- "crs$dataset"
+    {
+      if (theWidget("data_sample_checkbutton")$getActive())
+      {
+        if (is.null(included))
+          testset0 <- "crs$dataset[crs$sample,]"
+        else
+          testset0 <- sprintf("crs$dataset[crs$sample, %s]", included)
+      }
       else
-        testset0 <- sprintf("crs$dataset[,%s]", included)
-
+      {
+        if (is.null(included))
+          testset0 <- "crs$dataset"
+        else
+          testset0 <- sprintf("crs$dataset[,%s]", included)
+      }
+    }
     testname <- sprintf("%s [**%s**]", crs$dataname, Rtxt("train"))
   }
   else if (theWidget("evaluate_validation_radiobutton")$getActive())
   {
-    # Evaluate on validation data
+    # Evaluate on validation data.
 
-    if (is.null(included))
-      testset0 <- "crs$dataset[crs$validate,]"
+    if (not.null(crs$xdf))
+      testset0 <- paste0(testset0, validate)
     else
-      testset0 <- sprintf("crs$dataset[crs$validate, %s]", included)
+    {
+      if (is.null(included))
+        testset0 <- "crs$dataset[crs$validate,]"
+      else
+        testset0 <- sprintf("crs$dataset[crs$validate, %s]", included)
+    }
     testname <- sprintf("%s [%s]", crs$dataname, Rtxt("validate"))
   }
   else if (theWidget("evaluate_testing_radiobutton")$getActive())
   {
     # Evaluate on test data
 
-    if (is.null(included))
-      if (newSampling())
-        testset0 <- "crs$dataset[crs$test,]"
-      else
-        testset0 <- "crs$dataset[-crs$sample,]"
+    if (not.null(crs$xdf))
+      testset0 <- paste0(testset0, testing)
     else
-      if (newSampling())
-        testset0 <- sprintf("crs$dataset[crs$test, %s]", included)
+    {
+      if (is.null(included))
+      {
+        if (newSampling())
+          testset0 <- "crs$dataset[crs$test,]"
+        else
+          testset0 <- "crs$dataset[-crs$sample,]"
+      }
       else
-        testset0 <- sprintf("crs$dataset[-crs$sample, %s]", included)
+      {
+        if (newSampling())
+          testset0 <- sprintf("crs$dataset[crs$test, %s]", included)
+        else
+          testset0 <- sprintf("crs$dataset[-crs$sample, %s]", included)
+      }
+    }
     testname <- sprintf("%s [%s]", crs$dataname, Rtxt("test"))
   }
   else if (theWidget("evaluate_csv_radiobutton")$getActive())
@@ -694,6 +747,15 @@ executeEvaluateTab <- function()
     appendLog(Rtxt("Assign the R dataset to be used as the test set."), assign.cmd)
     eval(parse(text=assign.cmd))
   }
+  else
+  {
+    # The drop through seems to be full dataset. Do nothing to
+    # testset0 unless it is XDF where we change it to the full
+    # dataset.
+
+    if (not.null(crs$xdf)) testset0 <- "crs$xdf"
+  }
+
 
   # Ensure the test dataset has the same levels for each variable of
   # the training dataset. This can arise when we externally split a
@@ -866,33 +928,58 @@ executeEvaluateTab <- function()
   {
     cond.tree <- attr(class(crs$rpart), "package") %in% "party"
     if (! length(cond.tree)) cond.tree <- FALSE
-    
+
     testset[[crv$RPART]] <- testset0
-    predcmd[[crv$RPART]] <- sprintf("crs$pr <- predict(crs$rpart, newdata=%s)",
-                                testset[[crv$RPART]])
+
+    # 160903 XDF For now just get this working for the very specific
+    # weather dataset. Then generalise it to any dataset. So we have
+    # Yes_prob.
+    
+    if (not.null(crs$xdf))
+      predcmd[[crv$RPART]] <- sprintf(paste0("rxPredict(crs$rpart, data=%s, overwrite=TRUE)\n",
+                                             "crs$pr <- rxDataStep(%s, varsToKeep='Yes_prob')[[1]]"),
+                                      testset[[crv$RPART]], testset[[crv$RPART]])
+    else
+      predcmd[[crv$RPART]] <- sprintf("crs$pr <- predict(crs$rpart, newdata=%s)",
+                                      testset[[crv$RPART]])
 
     # For crv$RPART, the default is to generate class probabilities for
     # each output class, so ensure we instead generate the response.
 
-    respcmd[[crv$RPART]] <- gsub(")$",
-                                 ifelse(cond.tree,
-                                        ', type="response")',
-                                        ', type="class")'),
-                                 predcmd[[crv$RPART]])
+    # 160903 XDF For now just get this working for the very specific
+    # weather dataset. Then generalise it to any dataset. So we have
+    # Yes and No classes. Can rxPredict return the class?
+    
+    if (not.null(crs$xdf))
+      respcmd[[crv$RPART]] <- sprintf(paste0("rxPredict(crs$rpart, data=%s, overwrite=TRUE)\n",
+                                             'crs$pr <- ifelse(rxDataStep(%s, ',
+                                             'varsToKeep="Yes_prob")[[1]] > 0.5, "Yes", "No")'),
+                                      testset[[crv$RPART]], testset[[crv$RPART]])
+    else
+      respcmd[[crv$RPART]] <- gsub(")$",
+                                   ifelse(cond.tree,
+                                          ', type="response")',
+                                          ', type="class")'),
+                                   predcmd[[crv$RPART]])
 
     # For RPART the default predict command generates the probabilities
     # for each class and we assume we are interested in the final class
     # (i.e., for binary classification we are interested in the 1's).
 
-    if (cond.tree)
+    # 160903 XDF For now just get this working for the very specific
+    # weather dataset. Then generalise it to any dataset. So we have
+    # Yes_prob. Same as predcmd???? Check this is correct
+    
+    if (not.null(crs$xdf))
+      probcmd[[crv$RPART]] <- predcmd[[crv$RPART]]
+    else if (cond.tree)
       probcmd[[crv$RPART]] <- sub(')$', '), function(x) x[2])',
                                   sub("predict", "sapply(treeresponse",
                                       predcmd[[crv$RPART]]))
+    else if (binomialTarget())
+      probcmd[[crv$RPART]] <- sprintf("%s[,2]", predcmd[[crv$RPART]])
     else
-      if (binomialTarget())
-        probcmd[[crv$RPART]] <- sprintf("%s[,2]", predcmd[[crv$RPART]])
-      else
-        probcmd[[crv$RPART]] <- sprintf("%s", predcmd[[crv$RPART]])
+      probcmd[[crv$RPART]] <- sprintf("%s", predcmd[[crv$RPART]])
 
     if (multinomialTarget())
     {
@@ -1222,6 +1309,8 @@ executeEvaluateConfusion <- function(respcmd, testset, testname)
     #ts <- sub(',.*\\]', ', ]', testset[[mtype]])
     ts <- testset[[mtype]]
 
+    # 160903 XDF UP TO HERE Need to construct appropriate confuse.cmd...
+    
     confuse.cmd <- paste(sprintf("table(%s$%s, crs$pr,",
                                  ts, crs$target),
                          '\n        useNA="ifany",',
@@ -1231,9 +1320,9 @@ executeEvaluateConfusion <- function(respcmd, testset, testname)
 
     percentage.cmd <- paste('pcme <- function(actual, cl)',
                             '{',
-                            '  x <- table(actual, cl)',
-                            '  nc <- nrow(x) # Number of classes.',
-                            '  nv <- length(actual) - sum(is.na(actual) | is.na(cl)) # Number of values.',
+                            '  x   <- table(actual, cl)',
+                            '  nc  <- nrow(x) # Number of classes.',
+                            '  nv  <- length(actual) - sum(is.na(actual) | is.na(cl)) # Number of values.',
                             '  tbl <- cbind(x/nv,',
                             '               Error=sapply(1:nc,',
                             '                 function(r) round(sum(x[r,-r])/sum(x[r,]), 2)))',
