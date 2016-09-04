@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-05-12 10:14:47 Graham Williams>
+# Time-stamp: <2016-09-04 12:28:27 Graham Williams>
 #
 # Copyright (c) 2009-2016 Togaware Pty Ltd
 
@@ -133,6 +133,10 @@ on_aboutdialog_response <- function(object, ...)
 
   # Some global constants
 
+  # 160901 XDF Default number if rows for a preview.
+
+  crv$xdf.preview <- 1e4
+  
   # Default seed to use
 
   crv$seed <- 42
@@ -214,7 +218,7 @@ on_aboutdialog_response <- function(object, ...)
   crv$rpart.cp.default        <- 0.010
   crv$rpart.minsplit.default  <- 20
   crv$rpart.minbucket.default <- 7
-  crv$rpart.maxdepth.default  <- 30
+  crv$rpart.maxdepth.default  <- 3
 
   crv$ada.ntree.default   <- 50
 
