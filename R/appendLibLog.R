@@ -1,6 +1,6 @@
 #' Append a command to the Log tab dealing with namespaces
 #'
-#' Time-stamp: <2016-07-22 08:56:47 Graham Williams>
+#' Time-stamp: <2016-09-19 11:30:05 Graham Williams>
 #'
 #' @param comment      A message to include as a comment.
 #' @param ...          The command(s) to report in the log.
@@ -21,6 +21,8 @@ appendLibLog <- function(comment, ..., include.libs=TRUE)
   # operator since I do so in my book and users can get familiar with
   # it and choose, but it is also more succint.
   #
+  appendLog(comment, ...)
+  return()
   ## 150828
   # This started as the old appendLog but with a simplified parameter
   # list and added in the extraction of namespaces and then rewrite
