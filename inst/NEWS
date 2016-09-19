@@ -1,3 +1,12 @@
+rattle 5.0.1 Graham.Williams@togaware.com
+       
+       * Begin exposing :: prefix in the log tab. It's educational and
+         self documenting.
+
+       * Support Explore -> Distribution -> Group By to include the
+         numeric target variable (usually on categorics listed) if it
+         has 10 or fewer levels. Suggested by Eugene Dubassarsky.
+
 rattle 5.0.0 Graham.Williams@togaware.com
 
        * Initial support for the XDF format.
