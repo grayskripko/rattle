@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-09-19 17:10:33 Graham Williams>
+# Time-stamp: <2016-09-19 17:18:43 Graham Williams>
 #
 # DATA TAB
 #
@@ -3755,7 +3755,9 @@ getCategoricVariables <- function(type="string", include.target=F )
     # numeric. For pairs plot and box plot and histogram I now add a
     # mutate prior to the ggplot to convert the target to a factor
     # then all is good! So now it is okay to include a numeric target
-    # in the list of categoric variables if target is requested.
+    # in the list of categoric variables if target is requested. If
+    # this has wider implications then add the target specifically to
+    # the Group By combo box rather than changing the semantics here.
     
     included <- intersect(cats, indicies)
 
