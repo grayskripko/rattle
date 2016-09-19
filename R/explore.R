@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-09-19 13:07:28 Graham Williams>
+# Time-stamp: <2016-09-19 13:14:00 Graham Williams>
 #
 # Implement EXPLORE functionality.
 #
@@ -28,7 +28,7 @@ resetExploreTab <- function(new.dataset=TRUE)
   
   if (new.dataset)
   {
-    vl <- getCategoricVariables(type="names",include.target=T)
+    vl <- getCategoricVariables(type="names", include.target=TRUE)
     
     if (length(vl))
     {
