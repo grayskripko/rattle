@@ -1,9 +1,14 @@
 #' Perform the required operations for displaying boxplots using ggplot2.
 #' 
-#' Time-stamp: <2015-09-17 21:08:32 gjw>
+#' Time-stamp: <2016-09-19 16:05:05 Graham Williams>
 #' 
 executeBoxPlot2 <- function(dataset, vars, target, targets, stratify, sampling, pmax)
 {
+  # Check prerequisite packages.
+  
+  if (!packageIsAvailable("ggplot2", Rtxt("build plots using a grammar of graphics"))) return()
+  if (!packageIsAvailable("gridExtra", Rtxt("arrange plots on a grid"))) return()
+
   startLog(Rtxt("Display box plots for the selected variables."))
 
   # We start a new plot since we could be drawing multiple types of
@@ -22,6 +27,9 @@ executeBoxPlot2 <- function(dataset, vars, target, targets, stratify, sampling, 
     plot.cmd <- stringr::str_c('# Generate a box plot.\n\n',
                                sprintf("p%02d", i), ' <- crs %>%\n',
                                '  with(', dataset, ') %>%\n',
+                               if (length(target))
+                                 stringr::str_c('  dplyr::mutate(', target,
+                                                '=as.factor(', target, ')) %>%\n'),
                                '  ggplot2::ggplot(ggplot2::aes(y=', vars[i], ')) +\n',
                                '  ggplot2::geom_boxplot(ggplot2::aes(x="All"), ',
                                'notch=TRUE, fill="grey") +\n',
