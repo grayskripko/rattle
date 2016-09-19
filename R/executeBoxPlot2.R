@@ -1,6 +1,6 @@
 #' Perform the required operations for displaying boxplots using ggplot2.
 #' 
-#' Time-stamp: <2016-09-19 16:05:05 Graham Williams>
+#' Time-stamp: <2016-09-19 17:04:33 Graham Williams>
 #' 
 executeBoxPlot2 <- function(dataset, vars, target, targets, stratify, sampling, pmax)
 {
@@ -8,6 +8,7 @@ executeBoxPlot2 <- function(dataset, vars, target, targets, stratify, sampling, 
   
   if (!packageIsAvailable("ggplot2", Rtxt("build plots using a grammar of graphics"))) return()
   if (!packageIsAvailable("gridExtra", Rtxt("arrange plots on a grid"))) return()
+  if (!packageIsAvailable("dplyr", Rtxt("mutate the supplied dataset"))) return()
 
   startLog(Rtxt("Display box plots for the selected variables."))
 
