@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-07-24 16:27:21 Graham Williams>
+# Time-stamp: <2016-09-19 13:07:28 Graham Williams>
 #
 # Implement EXPLORE functionality.
 #
@@ -581,9 +581,10 @@ plotDigitFreq <- function(ds)
 
 executeBenfordPlot2 <- function(dname, benplots, target, targets, stratify, sampling, pmax)
 {
-  if (! packageIsAvailable("ggplot2", Rtxt("plot a Benford's distribution")) ||
-      ! packageIsAvailable("reshape", Rtxt("arrange data for Benford's distribution")))
-    return(FALSE)
+  # Ceck prerequisite packages.
+  
+  if (! packageIsAvailable("ggplot2", Rtxt("plot a Benford's distribution"))) return(FALSE)
+  if (! packageIsAvailable("reshape", Rtxt("arrange data for Benford's distribution"))) return(FALSE)
   
   startLog("Benford's Law")
 
