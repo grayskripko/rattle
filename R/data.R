@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-09-04 12:19:47 Graham Williams>
+# Time-stamp: <2016-09-19 17:10:33 Graham Williams>
 #
 # DATA TAB
 #
@@ -3748,10 +3748,24 @@ getCategoricVariables <- function(type="string", include.target=F )
   {
 
     indicies <- getVariableIndicies(crs$input)
-    if (include.target)
-      indicies<-c(indicies,getVariableIndicies(crs$target))
-    included <- intersect(cats, indicies)
+
+    # 160919 I tried the concept of adding the target even if it is
+    # numeric, but then pairs plot fails. The aim was to allow
+    # Benfords to group by the target by default, even if target is
+    # numeric. For pairs plot and box plot and histogram I now add a
+    # mutate prior to the ggplot to convert the target to a factor
+    # then all is good! So now it is okay to include a numeric target
+    # in the list of categoric variables if target is requested.
     
+    included <- intersect(cats, indicies)
+
+    if (include.target)
+    {
+      target.levels <- length(levels(as.factor(crs$dataset[[crs$target]])))
+      if (target.levels <= crv$max.categories) 
+        included <- c(included, getVariableIndicies(crs$target))
+    }
+
     if (type=="names")
       include <- names(crs$dataset)[included]
     else
