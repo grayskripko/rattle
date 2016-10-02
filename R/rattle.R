@@ -2,7 +2,7 @@
 #
 # BASE FUNCTIONS
 #
-# Time-stamp: <2016-09-04 10:04:11 Graham Williams>
+# Time-stamp: <2016-09-24 10:14:40 Graham Williams>
 #
 # Copyright (c) 2009-2016 Togaware Pty Ltd
 #
@@ -72,8 +72,8 @@ Rtxt <- function(...)
 
 RtxtNT <- Rtxt
 
-VERSION <- "5.0.0"
-DATE <- "2016-09-04"
+VERSION <- "5.0.2"
+DATE <- "2016-10-02"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2016 Togaware Pty Ltd.")
@@ -593,7 +593,8 @@ rattle <- function(csvname=NULL, dataset=NULL, useGtkBuilder=NULL)
   crv$GLM   	<- "glm"
   crv$RPART 	<- "rpart"
   crv$RXDTREE 	<- "rxdtree"
-  #GBM <- "gbm"
+  crv$RXDFOREST <- "rxdforest"
+#GBM <- "gbm"
   crv$ADA   	<- "ada"
   crv$RF    	<- "rf"
   crv$SVM   	<- "svm"
