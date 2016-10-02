@@ -10,10 +10,12 @@ export(
     digitDistr,
     drawTreesAda,
     drawTreeNodes,
+    errorMatrix,
     evaluateRisk,
     fancyRpartPlot,
     generateAprioriSummary,
     genPlotTitleCmd,
+    ggVarImp,
     listAdaVarsUsed,
     listTreesAda,
     listVersions,
@@ -34,6 +36,7 @@ export(
     rattle.print.summary.multinom,
     rescale.by.group,
     riskchart,
+    rocChart,
     # 120117 Remove for now - could be harmful.
     # overwritePackageFunction,
     savePlotToFile,
@@ -47,6 +50,8 @@ export(
 exportPattern("_") # Needed for the Glade interface
 
 S3method(asRules, rpart)
+S3method(ggVarImp, randomForest)
+S3method(ggVarImp, rpart)
 S3method(predict, hclust)
 S3method(predict, kmeans)
 S3method(print.summary, nnet)
