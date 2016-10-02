@@ -1,6 +1,7 @@
 riskchart <- function(pr, ac, ri=NULL,
                       title=NULL,
                       title.size=10,
+                      subtitle=TRUE,
                       show.legend=TRUE,
                       optimal=NULL, optimal.label="",
                       chosen=NULL, chosen.label="",
@@ -104,7 +105,12 @@ riskchart <- function(pr, ac, ri=NULL,
   p <- p + ggplot2::geom_text(data=scores, ggplot2::aes(x=100*pos, y=102, label=ticks), size=2)
   p <- p + ggplot2::annotate("text", x=0, y=110, label="Risk Scores", hjust=0, size=3)
   p <- p + ggplot2::geom_line(ggplot2::aes(y=100*Caseload))
-  p <- p + ggplot2::ggtitle(title)
+  if (is.logical(subtitle))
+      subtitle <- if (subtitle) genPlotTitleCmd(vector=TRUE) else NULL
+  if (is.character(subtitle))
+    p <- p + ggplot2::ggtitle(bquote(atop(.(title), atop(italic(.(subtitle)), ""))))
+  else
+    p <- p + ggplot2::ggtitle(title)
   p <- p + ggplot2::xlab("Caseload (%)") + ggplot2::ylab("Performance (%)")
   if (legend.horiz)
     p <- p + ggplot2::theme(legend.title=ggplot2::element_blank(),

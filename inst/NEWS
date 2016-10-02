@@ -9,6 +9,8 @@ rattle 5.0.2 Graham.Williams@togaware.com 2016-10-02 15:06:52
        * Update the weather AUS dataset from the Australian Bureau of
          Meteorology.
 
+       * Add a subtitle to riskchart().
+
 rattle 5.0.1 Graham.Williams@togaware.com
        
        * Begin exposing :: prefix in the log tab. It's educational and
