@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-09-01 15:40:54 Graham Williams>
+# Time-stamp: <2016-10-02 15:16:25 Graham Williams>
 #
 # MODEL TAB
 #
@@ -245,6 +245,7 @@ commonName <- function(mtype)
                          rf=Rtxt("Random Forest"),
                          rpart=Rtxt("Decision Tree"),
                          rxdtree=Rtxt("Big Data Decision Tree"),
+                         rxdforest=Rtxt("Big Data Random Forest"),
                          svm=Rtxt("SVM"),
                          ksvm=Rtxt("SVM"),
                          glm=Rtxt("Linear"),
@@ -349,7 +350,7 @@ existsPredictiveModel <- function()
 {
   # TRUE if there is a predictive model as distinct from a descriptive
   # model.
-  return(! is.null(listBuiltModels(c(crv$KMEANS, crv$HCLUST, crv$APRIORI))))
+  return(not.null(listBuiltModels(c(crv$KMEANS, crv$HCLUST, crv$APRIORI))))
 }
 
 noModelAvailable <- function(model, model.class)
@@ -481,7 +482,7 @@ executeModelTab <- function()
     {
       setStatusBar(sprintf(Rtxt("Building %s model ..."), commonName(crv$RPART)))
 
-      if (! is.null(crs$xdf))
+      if (not.null(crs$xdf))
       {
         if (executeModelRxDTree())
           theWidget("evaluate_rpart_checkbutton")$setActive(TRUE)
@@ -553,10 +554,18 @@ executeModelTab <- function()
   if (build.all || currentModelTab() == crv$RF)
   {
     setStatusBar(sprintf(Rtxt("Building %s model ..."), commonName(crv$RF)))
-    if (executeModelRF(traditional=theWidget("model_rf_traditional_radiobutton")$
-                       getActive(),
-                       conditional=theWidget("model_rf_conditional_radiobutton")$
-                       getActive()))
+    if (not.null(crs$xdf))
+    {
+      if (executeModelRxDForest())
+        theWidget("evaluate_rf_checkbutton")$setActive(TRUE)
+      else
+        setStatusBar(sprintf(Rtxt("Building %s model ... failed."),
+                             commonName("rxdforest")))
+    }
+    else if (executeModelRF(traditional=theWidget("model_rf_traditional_radiobutton")$
+                            getActive(),
+                            conditional=theWidget("model_rf_conditional_radiobutton")$
+                            getActive()))
       theWidget("evaluate_rf_checkbutton")$setActive(TRUE)
     else
       setStatusBar(sprintf(Rtxt("Building %s model ... failed."), commonName(crv$RF)))
@@ -702,7 +711,7 @@ executeModelGLM <- function()
                        sprintf(',\n    family=binomial(link="%s")',
                                ifelse(family=="Probit", "probit", "logit")),
                        #", na.action=na.pass",
-                       if (! is.null(crs$weights))
+                       if (not.null(crs$weights))
                               sprintf(",\n    weights=(%s)%s",
                                       crs$weights,
                                       ifelse(sampling, "[crs$train]", "")),
@@ -748,7 +757,7 @@ executeModelGLM <- function()
                        if (subsetting) ",",
                        if (including) included,
                        if (subsetting) "]",
-                       if (! is.null(crs$weights))
+                       if (not.null(crs$weights))
                        sprintf(",\n    weights=(%s)%s",
                                crs$weights,
                                ifelse(sampling, "[crs$train]", "")),
@@ -1004,7 +1013,7 @@ exportRegressionModel <- function()
 
   # Generate appropriate code.
   
-  if (! is.null(crs$weights))
+  if (not.null(crs$weights))
     wt <- gsub("^\\(|\\)$", "",
                gsub("crs\\$dataset\\$|\\[.*\\]", "",
                     capture.output(print(crs$weights))))
@@ -1186,7 +1195,7 @@ executeModelSVM <- function()
 
   # Replicate rows according to the integer weights variable.
   
-  if(! is.null(crs$weights))
+  if(not.null(crs$weights))
     dataset <- paste(dataset,
                      "[rep(row.names(",
                      dataset,
@@ -1322,13 +1331,13 @@ exportSVMModel <- function()
 
 #  if (get.extension(save.name) == "") save.name <- sprintf("%s.xml", save.name)
 
-  if (! is.null(crs$weights))
+  if (not.null(crs$weights))
     wt <- gsub("^\\(|\\)$", "",
                gsub("crs\\$dataset\\$|\\[.*\\]", "",
                     capture.output(print(crs$weights))))
   
   pmml.cmd <- paste('pmml(crs$ksvm, dataset=crs$dataset',
-                    if (! is.null(crs$weights))
+                    if (not.null(crs$weights))
                     paste(', weights=', wt, sep=""),
                     ')', sep="")
   appendLog(Rtxt("Export a SVM model as PMML."),
