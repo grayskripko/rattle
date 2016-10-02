@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-07-22 08:15:47 Graham Williams>
+# Time-stamp: <2016-10-02 13:36:06 Graham Williams>
 #
 # RANDOM FOREST TAB
 #
@@ -156,10 +156,14 @@ plotRandomForestImportance <- function()
                       'print(p)',
                       sep="\n")
   else
-    plot.cmd <- paste('randomForest::varImpPlot(crs$rf, main="")\n',
-                      genPlotTitleCmd(Rtxt("Variable Importance"),
-                                      commonName(crv$RF), crs$dataname),
-                      sep="")
+  {
+    tt <- genPlotTitleCmd(Rtxt("Variable Importance"),
+                          commonName(crv$RF), crs$dataname, vector=TRUE)
+    plot.cmd <- sprintf(paste0('p <- ggVarImp(crs$rf,\n',
+                               '              main="%s")\n',
+                               'print(p)'),
+                        tt[1])
+  }
 
   startLog()
   appendLog(Rtxt("Plot the relative importance of the variables."),
