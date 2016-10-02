@@ -1,15 +1,28 @@
+rattle 5.0.2 Graham.Williams@togaware.com 2016-10-02 15:06:52
+
+       * Implement generic ggVarImp() to plot variable importance for
+         different models.
+
+       * Implement errorMatrix() as a replacement for generating code
+         to do this pcme() during a rattle run.
+
+       * Update the weather AUS dataset from the Australian Bureau of
+         Meteorology.
+
 rattle 5.0.1 Graham.Williams@togaware.com
        
        * Begin exposing :: prefix in the log tab. It's educational and
          self documenting.
 
        * Support Explore -> Distribution -> Group By to include the
-         numeric target variable (usually on categorics listed) if it
-         has 10 or fewer levels. Suggested by Eugene Dubassarsky.
+         numeric target variable (usually only categorics listed) if
+         it has 10 or fewer levels. Suggested by Eugene Dubassarsky.
+
+       * Additional XDF support: rxDForest.
 
 rattle 5.0.0 Graham.Williams@togaware.com
 
-       * Initial support for the XDF format.
+       * Initial support for the XDF format: rxDTree.
 
 rattle 4.2.0 Graham.Williams@togaware.com 2016-07-22 06:19:15
 
