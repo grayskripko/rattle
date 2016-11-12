@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-10-02 11:44:15 Graham Williams>
+# Time-stamp: <2016-11-12 16:24:46 Graham Williams>
 #
 # Implement evaluate functionality.
 #
@@ -1318,8 +1318,10 @@ executeEvaluateConfusion <- function(respcmd, testset, testname)
                          Rtxt("Actual"), '", "',
                          Rtxt("Predicted"), '"))', sep="")
 
-    percentage.cmd <- sprintf('round(rattle::errorMatrix(%s$%s, crs$pr), 2)',
-                              ts, crs$target)
+    percentage.cmd <- paste(sprintf('per <- rattle::errorMatrix(%s$%s, crs$pr)',
+                                    ts, crs$target),
+                            '\nround(per, 2)')
+
 
     if (categoricTarget())
     {
