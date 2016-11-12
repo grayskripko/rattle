@@ -1,6 +1,6 @@
 #' Build a random forest based from xdf dataset.
 #' 
-#' Time-stamp: <2016-09-24 11:04:46 Graham Williams>
+#' Time-stamp: <2016-10-03 20:53:17 Graham Williams>
 #'
 executeModelRxDForest <- function()
 {
@@ -36,7 +36,8 @@ executeModelRxDForest <- function()
   # Commands.
 
   build.cmd <- paste0(VAR, " <- ", PKG, "::", FUNC, "(", frml, ",\n",
-                      "                                 data=crs$xdf.split[[1]]",
+                      "                                 data=crs$xdf.split[[1]],\n",
+                      "                                 importance=TRUE",
                       ")")
 
   print.cmd <- paste0("print(", VAR, ")")
@@ -58,6 +59,10 @@ executeModelRxDForest <- function()
                       NAME, TYPE, FUNC),
               "\n\n",
               collectOutput(print.cmd))
+
+  # Now that we have a model, make sure the buttons are sensitive.
+
+  showModelRFExists(traditional=TRUE, conditional=FALSE)
 
   # Finish up.
 
