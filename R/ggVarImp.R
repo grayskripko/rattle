@@ -31,3 +31,19 @@ ggVarImp.rpart <- function(model, main, sub, ...)
     ggplot2::theme(axis.text.x=ggplot2::element_text(angle=45, hjust=1),
                    legend.position="none")
 }
+
+ggVarImp.rxDForest <- function(model,
+                               main="Big Data Random Forest Variable Importance",
+                               sub=genPlotTitleCmd(vector=TRUE),
+                               ...)
+{
+  model$importance %>%
+    data.frame() %>%
+    dplyr::mutate(Variable=row.names(.)) %>%
+    ggplot2::ggplot(ggplot2::aes(x=Variable, y=IncNodePurity, fill=Variable)) +
+    ggplot2::geom_bar(stat="identity") +
+    ggplot2::ggtitle(label=main) +
+    ggplot2::xlab(label=sub) +
+    ggplot2::theme(axis.text.x=ggplot2::element_text(angle=45, hjust=1),
+                   legend.position="none")
+}
