@@ -2,7 +2,7 @@
 #
 # BASE FUNCTIONS
 #
-# Time-stamp: <2016-09-24 10:14:40 Graham Williams>
+# Time-stamp: <2016-11-13 09:16:12 Graham Williams>
 #
 # Copyright (c) 2009-2016 Togaware Pty Ltd
 #
@@ -73,7 +73,7 @@ Rtxt <- function(...)
 RtxtNT <- Rtxt
 
 VERSION <- "5.0.2"
-DATE <- "2016-11-12"
+DATE <- "2016-11-13"
 
 # 091223 Rtxt does not work until the rattle GUI has started, perhaps?
 COPYRIGHT <- paste(Rtxt("Copyright"), "(C) 2006-2016 Togaware Pty Ltd.")
@@ -264,6 +264,21 @@ rattle <- function(csvname=NULL, dataset=NULL, useGtkBuilder=NULL)
   #  stop(sprintf(Rtxt("The RGtk2 package is not available but is required",
   #                    "for the %s GUI."), crv$appname))
 
+  # 20161113 Test if a windowing capability is available and if not
+  # fail out of rattle().
+  
+  gtk_initialized <- .C("R_gtkInit",
+                        length(args),
+                        x=args,
+                        success=logical(1),
+                        PACKAGE="RGtk2")$success
+  if (!gtk_initialized)
+    stop("Can't load RGtk2.\n",
+         "  A windowing system can't be accessed?\n",
+         "  Maybe you are using a remote terminal (ssh) or RStudio server connection.\n",
+         "  Consider using remote desktop, ssh -X, or X2Go depending on your platform.\n",
+         "  Running rattle() locally is the default and will also work.")
+  
   # 101113 Use GtkBUilder or LibGlade?
   
   # 101009 We need to handle the case of an old install of Gtk (e.g.,
