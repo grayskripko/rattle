@@ -1,6 +1,6 @@
 # Gnome R Data Miner: GNOME interface to R for Data Mining
 #
-# Time-stamp: <2016-11-12 16:24:46 Graham Williams>
+# Time-stamp: <2016-11-19 16:12:00 Graham Williams>
 #
 # Implement evaluate functionality.
 #
@@ -1431,6 +1431,7 @@ executeEvaluateRisk <- function(probcmd, testset, testname)
   resetTextview(TV)
 
   advanced.graphics <- theWidget("use_ggplot2")$getActive()
+  initial_dev <- dev.list()
 
   # Ensure a risk variable has been specified. 081002 The plotRisk
   # function still works if no risk variable has been specified, so
@@ -1441,23 +1442,26 @@ executeEvaluateRisk <- function(probcmd, testset, testname)
   # Put 1 or 2 charts onto their own plots. Otherwise, put the
   # multiple charts onto one plot, keeping them all the same size
   # (thus if numplots is odd, leave a cell of the plot empty.
-
   numplots <- length(getEvaluateModels())
-  if (numplots == 1)
-    newPlot(1)
-  else if (numplots == 2)
-    newPlot(1)
-  else if (numplots %% 2 == 0)
-    newPlot(numplots)
-  else
-    newPlot(numplots + 1)
+
+  if (!advanced.graphics)
+  {
+    if (numplots == 1)
+      newPlot(1)
+    else if (numplots == 2)
+      newPlot(1)
+    else if (numplots %% 2 == 0)
+      newPlot(numplots)
+    else
+      newPlot(numplots + 1)
+  }
 
   if (numplots <= 2 )
     cex <- 1.0
   else if (numplots <= 4)
     cex <- 0.5
   else
-    cex <- 0.5
+    cex <- 0.3
 
   opar <- par(cex=cex)
 
@@ -1508,7 +1512,7 @@ executeEvaluateRisk <- function(probcmd, testset, testname)
 
 
       if (advanced.graphics)
-        plot.cmd <- paste("print(riskchart(crs$pr,",
+        plot.cmd <- paste("riskchart(crs$pr,",
                           '\n                ',
                           sprintf("%s$%s, ", testset[[mtype]], crs$target),
                           '\n                ',
@@ -1523,7 +1527,7 @@ executeEvaluateRisk <- function(probcmd, testset, testname)
                           'show.lift=', ifelse(numericTarget(), "FALSE", "TRUE"),
                           ', show.precision=', ifelse(numericTarget(), "FALSE", "TRUE"),
                           ', legend.horiz=FALSE',
-                          '))\n',
+                          ') %>% print()\n',
                           sep="")
       else
         plot.cmd <- paste("plotRisk(crs$eval$Caseload, ",
@@ -1691,10 +1695,11 @@ executeEvaluateRisk <- function(probcmd, testset, testname)
     # Display the Risk Chart itself now.
 
     # For 2 plots, so as not to overwrite the first plot, if we are
-    # about to plot the second plot, initiate a new plot.
+    # about to plot the second plot, initiate a new plot. The logic is
+    # not quite right as there is an initial empty plot (dev 2)?
 
-    if (advanced.graphics && dev.cur() != 2) # 121219 Not sure why 2?
-      newPlot()
+    if (advanced.graphics)
+      newPlot(1)
     else if (numplots == 2 && mtype == model.list[length(model.list)])
       newPlot(1)
 
@@ -1702,6 +1707,15 @@ executeEvaluateRisk <- function(probcmd, testset, testname)
 
   }
 
+  # 20161119 A phantom and empty X11cario device as dev number 2 pops
+  # up so kill it. The other devices are just cairo? NOT such a good
+  # idea closing the device if other plots are also on display and are
+  # using dev=2 just fine so check if the initial device list is empty
+  # too! The real solution is to figure why the inital dev=2 ends up
+  # empty.
+
+  if (advanced.graphics && is.null(initial_dev)) dev.off(2)
+  
   # Restore par
 
   par(opar)
