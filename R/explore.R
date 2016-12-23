@@ -121,8 +121,8 @@ executeExploreTab <- function()
       executeExploreGGobi(dataset, crs$dataname)
     else if (theWidget("explore_interactive_ggraptr_radiobutton")$getActive())
     {
-      rattle.dataset.for.ggraptR <<- crs$dataset
-      executeExploreGGRaptR("rattle.dataset.for.ggraptR")
+      # rattle.dataset.for.ggraptR <<- crs$dataset
+      executeExploreGGRaptR(crs$dataname)
     }
 #    else if (theWidget("explore_interactive_plotbuilder_radiobutton")$getActive())
 #      executeExplorePlotBuilder()
