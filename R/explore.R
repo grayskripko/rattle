@@ -122,7 +122,7 @@ executeExploreTab <- function()
     else if (theWidget("explore_interactive_ggraptr_radiobutton")$getActive())
     {
       # rattle.dataset.for.ggraptR <<- crs$dataset
-      executeExploreGGRaptR(crs$dataname)
+      executeExploreGGRaptR(crs$dataname, crs$dataset)
     }
 #    else if (theWidget("explore_interactive_plotbuilder_radiobutton")$getActive())
 #      executeExplorePlotBuilder()

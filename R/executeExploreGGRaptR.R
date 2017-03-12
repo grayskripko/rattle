@@ -2,7 +2,7 @@
 #' 
 #' Time-stamp: <2016-09-19 17:12:21 Graham Williams>
 #' 
-executeExploreGGRaptR <- function(dataset.name)
+executeExploreGGRaptR <- function(df_name, df)
 {
   # Check prerequisite packages.
 
@@ -13,9 +13,14 @@ executeExploreGGRaptR <- function(dataset.name)
   
   startLog(Rtxt("Display interactive plot builder."))
 
-  cmd <- sprintf('ggraptR::ggraptR(%s, port=5002)', dataset.name)
-  appendLog("Initiate the ggraptR application in a browser", cmd)
-  system(sprintf('R -q -e "%s"', cmd), wait=F, intern=F)  # debug: wait=intern=T + print
+  df_file <- 'ggraptr_df.rds'
+  saveRDS(df, file=df_file)
+  r_expr <- sprintf(
+    '%s <- readRDS(\'%s\');file.remove(\'%s\');ggraptR::ggraptR(%s, port=5002)', 
+    df_name, df_file, df_file, df_name)
   
+  appendLog("Initiate the ggraptR application in a browser", r_expr)
+  
+  system(sprintf('R -q --vanilla -e "%s"', r_expr), wait=F, intern=F)
   return()
 }
